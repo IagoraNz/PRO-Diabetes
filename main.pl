@@ -1,4 +1,5 @@
 :- dynamic diabetes/2.
+:- prompt(_, '').
 
 diabetes([maria, feminino, 37.0, nao, nao, passado, 30.5, 5.7, 100], nao).
 diabetes([gorete, feminino, 53.0, nao, nao, passado, 26.37, 4.5, 112], nao).
@@ -30,21 +31,65 @@ diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao).
 diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao).
 diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao).
 
+main :-
+    nl,
+    write('HOSPITAL SIRIO-PIAUIES'), nl,
+    write('1 - Adicionar paciente'), nl,
+    write('2 - Listar pacientes'), nl,
+    write('3 - Calcular IMC'), nl,
+    write('4 - Sair'), nl,
+    write('Escolha uma opcao: '),
+    read(Opcao),    
+    escolher_opcao(Opcao).
+
+escolher_opcao(1) :-
+    write('Digite o nome: '),
+    read(Nome),
+    write('Digite o sexo: '),
+    read(Sexo),
+    write('Digite a idade: '),
+    read(Idade),
+    write('Hipertensao?: '),
+    read(Hipertensao),
+    write('Problema cardiaco?: '),
+    read(Cardiaco),
+    write('Fumante?: '),
+    read(Fumante),
+    write('Sabe o seu IMC (s/n)?: '),
+    read(SabeImc),
+    (
+        SabeImc = 's' -> write('Digite o IMC: '), read(IMC);
+        SabeImc = 'n' -> calcular_imc(IMC)
+    ),
+    write('Hemoglobina: '),
+    read(Hemoglobina),
+    write('Glicose: '),
+    read(Glicose),
+    write('Diabetes?: '),
+    read(Diabetes),
+    adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
+    main.
+
+escolher_opcao(2) :-
+    listar_pacientes,
+    main.
+
 adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
-    \+ diabetes(Nome, _), % Check if the patient doesn't already exist
+    \+ diabetes(Nome, _),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     write('Paciente adicionado com sucesso!').
 
-adicionar_paciente([Nome, _, _, _, _, _, _, _, _], Diabetes) :-
+adicionar_paciente([Nome, _, _, _, _, _, _, _, _], _) :-
     diabetes(Nome, _),
     write('Paciente ja existe!'), nl.
 
 calcular_imc(Imc) :-
-    write('Digite o peso:'),
+    write('Digite o peso: '),
     read(Peso),
     write('Digite a altura: '),
     read(Altura),
-    Imc is Peso / (Altura * Altura).
+    TempImc is Peso / (Altura * Altura),
+    Imc is round(TempImc * 10) / 10.
 
 listar_pacientes :-
     diabetes(Paciente, Diabetes),
