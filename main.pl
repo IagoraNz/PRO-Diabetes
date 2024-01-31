@@ -32,13 +32,12 @@ diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao).
 
 adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     \+ diabetes(Nome, _), % Check if the patient doesn't already exist
-    assertz(diabetes(Nome, [Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose, Diabetes])),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     write('Paciente adicionado com sucesso!').
 
 adicionar_paciente([Nome, _, _, _, _, _, _, _, _], Diabetes) :-
     diabetes(Nome, _),
     write('Paciente ja existe!'), nl.
-
 
 calcular_imc(Imc) :-
     write('Digite o peso:'),
@@ -49,16 +48,8 @@ calcular_imc(Imc) :-
 
 listar_pacientes :-
     diabetes(Paciente, Diabetes),
-    write(Paciente),
+    write(Paciente), %aqui ele da um print no teu nome so e em diabetes ele mostra a lista com tudo
     write(' - Diabetes: '), write(Diabetes),
     nl,
     fail.
 listar_pacientes.
-
-listar_pacientes_dinamicos :-
-    paciente_dinamico(Nome, Atributos),
-    write(Nome),
-    write(' - Atributos: '), write(Atributos),
-    nl,
-    fail.
-listar_pacientes_dinamicos.
