@@ -124,7 +124,7 @@ editar_paciente :-
     write('Digite o nome do paciente que deseja editar: '),
     read(Nome),
     write('Digite qual campo deseja editar '), nl,
-    write('(nome, sexo, idade, hipertensao, cardiaco, fumante, imc, hemoglobina, glicose, diabetes): ')
+    write('(nome, sexo, idade, hipertensao, cardiaco, fumante, imc, hemoglobina, glicose, diabetes): '),
     read(Campo),
     (
         Campo = 'nome' -> write('Digite o novo nome: '), read(NovoNome), editar_nome(Nome, NovoNome);
