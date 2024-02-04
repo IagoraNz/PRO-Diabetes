@@ -209,3 +209,94 @@ editar_diabetes(Nome, NovoDiabetes) :-
 editar_diabetes(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
+
+
+% Regra para calcular a probabilidade de diabetes em escala de 0 a 1
+chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Probabilidade) :-
+    % Fatores que contribuem para a 
+    fator_sexo(Sexo, FatorSexo),
+    fator_hipertensao(Hipertensao, FatorHipertensao),
+    fator_idade(Idade, FatorIdade),
+    fator_imc(IMC, FatorIMC),
+    fator_hemoglobina(Hemoglobina, FatorHemoglobina),
+    fator_glicose(Glicose, FatorGlicose),
+    fator_cardiaco(Cardiaco, FatorCardiaco),
+    fator_fumante(Fumante, FatorFumante),
+
+    % Cálculo da probabilidade
+    Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo.
+
+    
+
+
+
+fator_sexo(Sexo, Fator) :-
+    (
+        (Sexo = 'masculino', Fator is 1);
+        (Sexo = 'feminino', Fator is 0)  
+    ).
+
+fator_hipertensao(Hipertensao, Fator) :-
+    (
+        (Hipertensao = 'sim', Fator is 2);
+        (Hipertensao = 'nao', Fator is 0)
+    ).
+    
+% Fatores individuais
+fator_idade(Idade, Fator) :- 
+    (
+        (Idade >= 45, Fator is 2, !);
+        (Idade < 45, Fator is 0)    
+    ).
+fator_imc(IMC, Fator) :- 
+    (
+        (IMC =< 25, Fator is 0, !);
+        (IMC > 25, IMC < 30, Fator is 1, !);
+        (IMC >= 30, IMC < 35, Fator is 2, !);
+        (IMC >= 35, Fator is 3)
+    ).
+
+fator_hemoglobina(Hemoglobina, Fator) :- 
+    (
+        (Hemoglobina < 5.7, Fator is 0, !);
+        (Hemoglobina > 5.7, Hemoglobina < 6.5, Fator is 1, !);
+        (Hemoglobina >= 6.5, Fator is 2)
+    ).
+fator_glicose(Glicose, Fator) :-
+    write('Fez o exame de glicose em Jejum? (sim/nao): '), 
+    read(Cond), 
+    (
+        Cond = 'sim',
+        (
+            (Glicose < 100, Fator is 0);
+            (Glicose >= 100, Glicose =< 125, Fator is 1);
+            (Glicose > 125, Fator is 2)
+        )
+        ;
+        Cond = 'nao',
+        (
+            (Glicose < 140, Fator is 0);
+            (Glicose >= 140, Glicose < 200, Fator is 1);
+            (Glicose >= 200, Fator is 2)
+        )
+    ).
+
+
+
+
+fator_cardiaco(Cardiaco, Fator) :- 
+    (
+        (Cardiaco = 'sim', Fator is 1);
+        (Cardiaco = 'nao', Fator is 0)    
+    ).
+
+fator_fumante(Fumante, Fator) :- 
+    (
+        (Fumante = 'sim', Fator is 2);
+        (Fumante = 'passado', Fator is 1);
+        (Fumante = 'nunca', Fator is 0)    
+    ).
+
+
+
+
