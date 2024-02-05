@@ -31,6 +31,11 @@ diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao).
 diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao).
 diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao).
 
+% OlaMundo
+
+
+
+
 main :-
     nl, nl,
     write('HOSPITAL SIRIO-PIAUIES'), nl,
