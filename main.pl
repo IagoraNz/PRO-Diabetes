@@ -218,7 +218,7 @@ editar_diabetes(_, _) :-
 
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
 chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
-    % Fatores que contribuem para a 
+    % Fatores que contribuem para a probabilidade
     fator_sexo(Sexo, FatorSexo),
     fator_hipertensao(Hipertensao, FatorHipertensao),
     fator_idade(Idade, FatorIdade),
@@ -231,28 +231,48 @@ chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobi
     % Cálculo da probabilidade
     Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
 
-    (
-        Probabilidade >= 7, 
-        (
-            (FatorGlicose == 0, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
-            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
-            (FatorGlicose == 2, Diabetes = sim)
+    % Avaliação das condições de probabilidade
+    (   Probabilidade >= 7,
+        (   FatorGlicose == 0,
+            perguntas_extras(Pextras),
+            (   Pextras >= 2, Diabetes = sim
+            ;   Pextras < 2, Diabetes = nao
+            )
+        ;   FatorGlicose == 1,
+            perguntas_extras(Pextras),
+            (   Pextras >= 2, Diabetes = sim
+            ;   Pextras < 2, Diabetes = nao
+            )
+        ;   FatorGlicose == 2,
+            Diabetes = sim
         )
-    ;
-        Probabilidade >= 4, Probabilidade < 7,
-        (
-            (FatorGlicose == 0, Diabetes = nao),
-            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
-            (FatorGlicose == 2, Diabetes = sim)
+    ;   Probabilidade >= 4, Probabilidade < 7,
+        (   FatorGlicose == 0,
+            Diabetes = nao
+        ;   FatorGlicose == 1,
+            perguntas_extras(Pextras),
+            (   Pextras >= 2, Diabetes = sim
+            ;   Pextras < 2, Diabetes = nao
+            )
+        ;   FatorGlicose == 2,
+            Diabetes = sim
         )
-    ;
-        Probabilidade < 4,
-        (
-            (FatorGlicose == 0, Diabetes = nao),
-            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
-            (FatorGlicose == 2, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao))
+    ;   Probabilidade < 4,
+        (   FatorGlicose == 0,
+            Diabetes = nao
+        ;   FatorGlicose == 1,
+            perguntas_extras(Pextras),
+            (   Pextras >= 2, Diabetes = sim
+            ;   Pextras < 2, Diabetes = nao
+            )
+        ;   FatorGlicose == 2,
+            perguntas_extras(Pextras),
+            (   Pextras >= 2, Diabetes = sim
+            ;   Pextras < 2, Diabetes = nao
+            )
         )
     ).
+
     
 
 
