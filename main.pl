@@ -217,7 +217,7 @@ editar_diabetes(_, _) :-
 
 
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
-chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Probabilidade) :-
+chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     % Fatores que contribuem para a 
     fator_sexo(Sexo, FatorSexo),
     fator_hipertensao(Hipertensao, FatorHipertensao),
@@ -229,9 +229,47 @@ chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobi
     fator_fumante(Fumante, FatorFumante),
 
     % Cálculo da probabilidade
-    Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo.
+    Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
 
+    (
+        Probabilidade >= 7, 
+        (
+            (FatorGlicose == 0, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
+            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
+            (FatorGlicose == 2, Diabetes = sim)
+        )
+    ;
+        Probabilidade >= 4, Probabilidade < 7,
+        (
+            (FatorGlicose == 0, Diabetes = nao),
+            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
+            (FatorGlicose == 2, Diabetes = sim)
+        )
+    ;
+        Probabilidade < 4,
+        (
+            (FatorGlicose == 0, Diabetes = nao),
+            (FatorGlicose == 1, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao)),
+            (FatorGlicose == 2, perguntas_extras(Pextras), (Pextras >= 2, Diabetes = sim); (Pextras < 2, Diabetes = nao))
+        )
+    ).
     
+
+
+perguntas_extras(Pextras) :-
+        write('Voce e sedentario?'), nl,
+        write('sim ou nao: '), read(Sedentario),
+        write('Voce tem um parente de primeiro grau - Pai, Mae, Irmao ou Irma - com diabetes? '), nl,
+        write('sim ou nao: '), read(HistoricoF), 
+        (
+            (Sedentario = 'sim', FatorS is 1);
+            (Sedentario = 'nao', FatorS is 0)
+        ),
+        (
+            (HistoricoF = 'sim', FatorHF is 2);
+            (HistoricoF = 'nao', FatorHF is 0)    
+        ),
+        Pextras is FatorS + FatorHF.
 
 
 
