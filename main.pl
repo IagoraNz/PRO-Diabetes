@@ -215,71 +215,75 @@ editar_diabetes(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
 % Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
-% contar_elementos_lista([], 0). % Caso base: a lista está vazia, então o número de elementos é 0
-% contar_elementos_lista([Elemento|Resto], Contagem) :-
-%     Elemento \= '_', % Verifica se o elemento atual não é igual a '_'
-%     contar_elementos_lista(Resto, ContagemRestante),
-%     Contagem is ContagemRestante + 1.
+contar_elementos_lista([], 0). % Caso base: a lista está vazia, então o número de elementos é 0
+contar_elementos_lista([Elemento|Resto], Contagem) :-
+    Elemento \= '_', % Verifica se o elemento atual não é igual a '_'
+    contar_elementos_lista(Resto, ContagemRestante),
+    Contagem is ContagemRestante + 1.
 
-% contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
-%     contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
+contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
+    contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
 
 
 
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
 chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
+    contar_elementos_lista([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], ContagemE),
+    write(ContagemE), nl,
+    (   (ContagemE =< 1 ; Glicose = '_'),
+        Diabetes = indeterminavel
+    ;   % Fatores que contribuem para a probabilidade
+        fator_sexo(Sexo, FatorSexo),
+        fator_hipertensao(Hipertensao, FatorHipertensao),
+        fator_idade(Idade, FatorIdade),
+        fator_imc(IMC, FatorIMC),
+        fator_hemoglobina(Hemoglobina, FatorHemoglobina),
+        fator_glicose(Glicose, FatorGlicose),
+        fator_cardiaco(Cardiaco, FatorCardiaco),
+        fator_fumante(Fumante, FatorFumante),
 
-    % Fatores que contribuem para a probabilidade
-    fator_sexo(Sexo, FatorSexo),
-    fator_hipertensao(Hipertensao, FatorHipertensao),
-    fator_idade(Idade, FatorIdade),
-    fator_imc(IMC, FatorIMC),
-    fator_hemoglobina(Hemoglobina, FatorHemoglobina),
-    fator_glicose(Glicose, FatorGlicose),
-    fator_cardiaco(Cardiaco, FatorCardiaco),
-    fator_fumante(Fumante, FatorFumante),
+        % Cálculo da probabilidade
+        Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
 
-    % Cálculo da probabilidade
-    Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
-
-    % Avaliação das condições de probabilidade
-    (   Probabilidade >= 7,
-        (   FatorGlicose == 0,
-            perguntas_extras(Pextras),
-            (   Pextras >= 2, Diabetes = sim
-            ;   Pextras < 2, Diabetes = nao
+        % Avaliação das condições de probabilidade
+        (   Probabilidade >= 7,
+            (   FatorGlicose == 0,
+                perguntas_extras(Pextras),
+                (   Pextras >= 2, Diabetes = sim
+                ;   Pextras < 2, Diabetes = nao
+                )
+            ;   FatorGlicose == 1,
+                perguntas_extras(Pextras),
+                (   Pextras >= 2, Diabetes = sim
+                ;   Pextras < 2, Diabetes = nao
+                )
+            ;   FatorGlicose == 2,
+                Diabetes = sim
             )
-        ;   FatorGlicose == 1,
-            perguntas_extras(Pextras),
-            (   Pextras >= 2, Diabetes = sim
-            ;   Pextras < 2, Diabetes = nao
+        ;   Probabilidade >= 4, Probabilidade < 7,
+            (   FatorGlicose == 0,
+                Diabetes = nao
+            ;   FatorGlicose == 1,
+                perguntas_extras(Pextras),
+                (   Pextras >= 2, Diabetes = sim
+                ;   Pextras < 2, Diabetes = nao
+                )
+            ;   FatorGlicose == 2,
+                Diabetes = sim
             )
-        ;   FatorGlicose == 2,
-            Diabetes = sim
-        )
-    ;   Probabilidade >= 4, Probabilidade < 7,
-        (   FatorGlicose == 0,
-            Diabetes = nao
-        ;   FatorGlicose == 1,
-            perguntas_extras(Pextras),
-            (   Pextras >= 2, Diabetes = sim
-            ;   Pextras < 2, Diabetes = nao
-            )
-        ;   FatorGlicose == 2,
-            Diabetes = sim
-        )
-    ;   Probabilidade < 4,
-        (   FatorGlicose == 0,
-            Diabetes = nao
-        ;   FatorGlicose == 1,
-            perguntas_extras(Pextras),
-            (   Pextras >= 2, Diabetes = sim
-            ;   Pextras < 2, Diabetes = nao
-            )
-        ;   FatorGlicose == 2,
-            perguntas_extras(Pextras),
-            (   Pextras >= 2, Diabetes = sim
-            ;   Pextras < 2, Diabetes = nao
+        ;   Probabilidade < 4,
+            (   FatorGlicose == 0,
+                Diabetes = nao
+            ;   FatorGlicose == 1,
+                perguntas_extras(Pextras),
+                (   Pextras >= 2, Diabetes = sim
+                ;   Pextras < 2, Diabetes = nao
+                )
+            ;   FatorGlicose == 2,
+                perguntas_extras(Pextras),
+                (   Pextras >= 2, Diabetes = sim
+                ;   Pextras < 2, Diabetes = nao
+                )
             )
         )
     ).
