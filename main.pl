@@ -214,10 +214,21 @@ editar_diabetes(Nome, NovoDiabetes) :-
 editar_diabetes(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
+% Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
+% contar_elementos_lista([], 0). % Caso base: a lista está vazia, então o número de elementos é 0
+% contar_elementos_lista([Elemento|Resto], Contagem) :-
+%     Elemento \= '_', % Verifica se o elemento atual não é igual a '_'
+%     contar_elementos_lista(Resto, ContagemRestante),
+%     Contagem is ContagemRestante + 1.
+
+% contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
+%     contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
+
 
 
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
-chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
+chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
+
     % Fatores que contribuem para a probabilidade
     fator_sexo(Sexo, FatorSexo),
     fator_hipertensao(Hipertensao, FatorHipertensao),
@@ -273,8 +284,40 @@ chances_diabetes([_, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobi
         )
     ).
 
-    
 
+
+% Regra para encontrar o menor valor de glicose quando o paciente tem diabetes
+menor_glicose_diabetes(MenorGlicose) :-
+    findall(Glicose, diabetes([_, _, _, _, _, _, _, _, Glicose], sim), ListaGlicoses),
+    min_list(ListaGlicoses, MenorGlicose).
+
+% Regra para encontrar o maior valor de glicose quando o paciente tem diabetes
+maior_glicose_diabetes(MaiorGlicose) :-
+    findall(Glicose, diabetes([_, _, _, _, _, _, _, _, Glicose], sim), ListaGlicoses),
+    max_list(ListaGlicoses, MaiorGlicose).
+
+
+% Regra para encontrar o menor valor de glicose quando o paciente não tem diabetes
+menor_glicose(MenorGlicoseS) :-
+    findall(Glicose, diabetes([_, _, _, _, _, _, _, _, Glicose], nao), ListaGlicoses),
+    min_list(ListaGlicoses, MenorGlicoseS).
+
+% Regra para encontrar o maior valor de glicose quando o paciente  não tem diabetes
+maior_glicose(MaiorGlicoseS) :-
+    findall(Glicose, diabetes([_, _, _, _, _, _, _, _, Glicose], nao), ListaGlicoses),
+    max_list(ListaGlicoses, MaiorGlicoseS).
+
+
+fator_glicose(Glicose, Fator) :-
+    maior_glicose_diabetes(MaiorGlicose), 
+    menor_glicose_diabetes(MenorGlicose), 
+    maior_glicose(MaiorGlicoseS), 
+    menor_glicose(MenorGlicoseS),
+    (
+        (Glicose >= MenorGlicose, Glicose =< MaiorGlicoseS, Fator is 1);
+        (Glicose =< MaiorGlicoseS, Glicose >= MenorGlicoseS, Fator is 0);
+        (Glicose >= MenorGlicose, Glicose =< MaiorGlicose, Fator is 2)
+    ).
 
 perguntas_extras(Pextras) :-
         write('Voce e sedentario?'), nl,
@@ -293,11 +336,35 @@ perguntas_extras(Pextras) :-
 
 
 
+% Regra para contar o número de pessoas masculinas com diabetes
+contar_diabeticos_masculinos(Contagem) :-
+    findall(_, (diabetes([_, masculino, _, _, _, _, _, _, _], sim)), Lista),
+    length(Lista, Contagem).
+
+contar_diabeticos_femininos(Contagem) :-
+    findall(_, (diabetes([_, feminino, _, _, _, _, _, _, _], sim)), Lista),
+    length(Lista, Contagem).
+
+% Exemplo de consulta
+% ?- contar_diabeticos_masculinos(NumeroDeDiabeticosMasculinos).
+
 fator_sexo(Sexo, Fator) :-
+    contar_diabeticos_masculinos(ContMasc),
+    contar_diabeticos_femininos(ContFemi),
     (
-        (Sexo = 'masculino', Fator is 1);
-        (Sexo = 'feminino', Fator is 0)  
+        (ContMasc > ContFemi, Sexo = masculino, Fator is 1);
+        (ContMasc > ContFemi, Sexo = feminino, Fator is 0);
+        (ContFemi > ContMasc, Sexo = masculino, Fator is 0);
+        (ContFemi > ContMasc, Sexo = feminino, Fator is 1)
     ).
+
+% contar_diabeticos_hipertensos(Contagem) :-
+%     findall(_, (diabetes([_, _, _, sim, _, _, _, _, _], sim)), Lista),
+%     length(Lista, Contagem).
+
+% contar_diabeticos_nao_hipertensos(Contagem) :-
+%     findall(_, (diabetes([_, _, _, nao, _, _, _, _, _], sim)), Lista),
+%     length(Lista, Contagem).
 
 fator_hipertensao(Hipertensao, Fator) :-
     (
@@ -311,6 +378,11 @@ fator_idade(Idade, Fator) :-
         (Idade >= 45, Fator is 2, !);
         (Idade < 45, Fator is 0)    
     ).
+
+
+
+
+
 fator_imc(IMC, Fator) :- 
     (
         (IMC =< 25, Fator is 0, !);
@@ -318,33 +390,12 @@ fator_imc(IMC, Fator) :-
         (IMC >= 30, IMC < 35, Fator is 2, !);
         (IMC >= 35, Fator is 3)
     ).
-
-fator_hemoglobina(Hemoglobina, Fator) :- 
+fator_hemoglobina(Hemoglobina, Fator) :-
     (
         (Hemoglobina < 5.7, Fator is 0, !);
-        (Hemoglobina > 5.7, Hemoglobina < 6.5, Fator is 1, !);
+        (Hemoglobina >= 5.7, Hemoglobina < 6.5, Fator is 1, !);
         (Hemoglobina >= 6.5, Fator is 2)
     ).
-fator_glicose(Glicose, Fator) :-
-    write('Fez o exame de glicose em Jejum? (sim/nao): '), 
-    read(Cond), 
-    (
-        Cond = 'sim',
-        (
-            (Glicose < 100, Fator is 0);
-            (Glicose >= 100, Glicose =< 125, Fator is 1);
-            (Glicose > 125, Fator is 2)
-        )
-        ;
-        Cond = 'nao',
-        (
-            (Glicose < 140, Fator is 0);
-            (Glicose >= 140, Glicose < 200, Fator is 1);
-            (Glicose >= 200, Fator is 2)
-        )
-    ).
-
-
 
 
 fator_cardiaco(Cardiaco, Fator) :- 
@@ -360,6 +411,4 @@ fator_fumante(Fumante, Fator) :-
         (Fumante = 'nunca', Fator is 0)    
     ).
 
-
-
-
+    
