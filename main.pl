@@ -31,11 +31,6 @@ diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao).
 diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao).
 diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao).
 
-% OlaMundo
-
-
-
-
 main :-
     nl, nl,
     write('HOSPITAL SIRIO-PIAUIES'), nl,
@@ -72,8 +67,7 @@ escolher_opcao(1) :-
     read(Hemoglobina),
     write('Glicose: '),
     read(Glicose),
-    write('Diabetes?: '),
-    read(Diabetes),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
     adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
     main.
 
@@ -382,10 +376,6 @@ fator_idade(Idade, Fator) :-
         (Idade >= 45, Fator is 2, !);
         (Idade < 45, Fator is 0)    
     ).
-
-
-
-
 
 fator_imc(IMC, Fator) :- 
     (
