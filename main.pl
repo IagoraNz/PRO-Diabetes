@@ -39,7 +39,8 @@ main :-
     write('3 - Calcular IMC'), nl,
     write('4 - Editar paciente'), nl,
     write('5 - Remover paciente'), nl,
-    write('6 - Sair'), nl,
+    write('6 - Diagnosticar'), nl,
+    write('7 - Sair'), nl,
     write('Escolha uma opcao: '),
     read(Opcao),    
     escolher_opcao(Opcao).
@@ -67,7 +68,8 @@ escolher_opcao(1) :-
     read(Hemoglobina),
     write('Glicose: '),
     read(Glicose),
-    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
+    write('Diabetes?: '),
+    read(Diabetes),
     adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
     main.
 
@@ -92,6 +94,58 @@ escolher_opcao(5) :-
     main.
 
 escolher_opcao(6) :-
+    write('Digite o nome: '),
+    read(Nome),
+    write('Digite o sexo: '),
+    read(Sexo),
+    write('Digite a idade: '),
+    read(Idade),
+    write('Sabe se tem Hipertensao (s/n)? '),
+    read(TemHipertensao),
+    (
+        TemHipertensao = 's' -> write('Hipertensao (sim/nao):'), read(Hipertensao);
+        TemHipertensao = 'n' -> Hipertensao = '_'
+    ),
+    write('Problema cardiaco?: '),
+    read(TemCardiaco),
+    (
+        TemCardiaco = 's' -> write('Cardiaco (sim/nao): '), read(Cardiaco);
+        TemCardiaco = 'n' -> Cardiaco = '_'
+    ),
+    write('Fumante? (sim/nao): '),
+    read(Fumante),
+    write('Sabe o seu IMC (s/n)?: '),
+    read(SabeImc),
+    (
+        SabeImc = 's' -> write('Digite o IMC: '), read(IMC);
+        SabeImc = 'n' -> calcular_imc(IMC)
+    ),
+    write('Sabe Hemoglobina (s/n)? '),
+    read(SabeHemoglobina),
+    (
+        SabeHemoglobina = 's' -> write('Hemoglobina: '), read(Hemoglobina);
+        SabeHemoglobina = 'n' -> Hemoglobina = '_'
+    ),
+    write('Sabe Glicose (s/n)? '),
+    read(SabeGlicose),
+    (
+        SabeGlicose = 's' -> write('Glicose: '), read(Glicose);
+        SabeGlicose = 'n' -> Glicose = '_'
+    ),
+    write(Hipertensao), nl,
+    write(Cardiaco), nl,
+    write(Fumante), nl,
+    write(IMC), nl,
+    write(Hemoglobina), nl,
+    write(Glicose), nl,
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
+    (
+        Diabetes = 'sim' -> write('Voce possui Diabetes.'),nl;
+        Diabetes = 'nao' -> write('Voce nao possui Diabetes'),nl;
+        Diabetes = 'indeterminavel' -> write('nao foi possivel realizar o diagnostico, volte com mais exames!'), nl  
+    ).
+
+escolher_opcao(7) :-
     write('Ate logo!'), nl.
 
 adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
@@ -218,8 +272,6 @@ contar_elementos_lista([Elemento|Resto], Contagem) :-
 contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
     contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
 
-
-
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
 chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     contar_elementos_lista([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], ContagemE),
@@ -332,8 +384,6 @@ perguntas_extras(Pextras) :-
         ),
         Pextras is FatorS + FatorHF.
 
-
-
 % Regra para contar o número de pessoas masculinas com diabetes
 contar_diabeticos_masculinos(Contagem) :-
     findall(_, (diabetes([_, masculino, _, _, _, _, _, _, _], sim)), Lista),
@@ -342,9 +392,6 @@ contar_diabeticos_masculinos(Contagem) :-
 contar_diabeticos_femininos(Contagem) :-
     findall(_, (diabetes([_, feminino, _, _, _, _, _, _, _], sim)), Lista),
     length(Lista, Contagem).
-
-% Exemplo de consulta
-% ?- contar_diabeticos_masculinos(NumeroDeDiabeticosMasculinos).
 
 fator_sexo(Sexo, Fator) :-
     contar_diabeticos_masculinos(ContMasc),
@@ -355,14 +402,6 @@ fator_sexo(Sexo, Fator) :-
         (ContFemi > ContMasc, Sexo = masculino, Fator is 0);
         (ContFemi > ContMasc, Sexo = feminino, Fator is 1)
     ).
-
-% contar_diabeticos_hipertensos(Contagem) :-
-%     findall(_, (diabetes([_, _, _, sim, _, _, _, _, _], sim)), Lista),
-%     length(Lista, Contagem).
-
-% contar_diabeticos_nao_hipertensos(Contagem) :-
-%     findall(_, (diabetes([_, _, _, nao, _, _, _, _, _], sim)), Lista),
-%     length(Lista, Contagem).
 
 fator_hipertensao(Hipertensao, Fator) :-
     (
@@ -376,6 +415,10 @@ fator_idade(Idade, Fator) :-
         (Idade >= 45, Fator is 2, !);
         (Idade < 45, Fator is 0)    
     ).
+
+
+
+
 
 fator_imc(IMC, Fator) :- 
     (
