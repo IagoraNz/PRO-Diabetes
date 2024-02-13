@@ -2,76 +2,48 @@
 :- prompt(_, '').
 
 diabetes([maria, feminino, 37.0, nao, nao, passado, 30.5, 5.7, 100], nao). %OK
-diabetes([gorete, feminino, 53.0, nao, nao, passado, 26.37, 4.5, 112], nao).
-diabetes([pedro, masculino, 54.0, nao, nao, nunca, 31.86, 6.6, 145],nao).
-diabetes([juliana, feminino, 37.0, nao, nao, passado, 21.25, 6.1, 200], nao).
-diabetes([catisvalda, feminino, 56.0, nao, nao, nunca, 30.95, 6.5, 145], nao).
-diabetes([ursulino, masculino, 79.0, nao, nao, passado, 31.19, 5.8, 155], nao).
-diabetes([jose, masculino, 67.0, nao, nao, sim, 27.32, 6.8, 220], sim).
-diabetes([marta, feminino, 74.0, nao, nao, sim, 29.51, 8.2, 240], sim).
-diabetes([jussara, feminino, 37.0, nao, nao, passado, 36.87, 8.8, 160], sim).
-diabetes([katia, feminino, 65.0, sim, sim, nunca, 33.55, 8.9, 202], sim).
-diabetes([marcelo, masculino, 55.0, nao, sim, passado, 30.42, 6.2, 300], sim).
-diabetes([ayla, feminino, 61.0, nao, nao, passado, 34.45, 6.5, 280], sim).
-diabetes([rafaela, feminino, 58.0, sim, nao, nunca, 38.31, 7.0, 200], sim).
-diabetes([cassia, feminino, 61.0, nao, nao, sim, 30.11, 6.2, 240], sim).
-diabetes([elisa, feminino, 26.0, nao, nao, passado, 27.32, 4.0, 200], nao).
-diabetes([alice, feminino, 74.0, nao, nao, passado, 28.12, 5.0, 100], nao).
-diabetes([jade, feminino, 45.0, sim, nao, nunca, 23.05, 4.8, 130], nao).
-diabetes([heloise, masculino, 56.0, nao, nao, nunca, 26.78, 4.8, 200], nao).
-diabetes([benicio, masculino, 20.0, nao, nao, passado, 23.04, 5.7, 160], nao).
-diabetes([paulo, masculino, 70.0, nao, nao, passado, 15.94, 5.8, 158], nao).
-diabetes([otavio, masculino, 30.0, nao, nao, passado, 15.8, 6.2, 90], nao).
-diabetes([isis, feminino, 80.0, nao, nao, nunca, 22.04, 9.0, 209], sim).
-diabetes([francinaldo, masculino, 63.0, nao, sim, passado, 27.32, 6.6, 300], sim).
-diabetes([juvelino, masculino, 58.0, nao, nao, passado, 32.38, 6.6, 159], sim).
-diabetes([maya, feminino, 43.0, sim, nao, nunca, 34.21, 9.0, 160], sim).
-diabetes([genetildes, masculino, 56.0, nao, nao, nunca, 37.59, 4.0, 159], nao).
-diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao).
-diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao).
-diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao).
+diabetes([gorete, feminino, 53.0, nao, nao, passado, 26.37, 4.5, 112], nao). %OK
+diabetes([pedro, masculino, 54.0, nao, nao, nunca, 31.86, 6.6, 145],nao). %OK
+diabetes([juliana, feminino, 37.0, nao, nao, passado, 21.25, 6.1, 200], nao). %OK
+diabetes([catisvalda, feminino, 56.0, nao, nao, nunca, 30.95, 6.5, 145], nao). %OK
+diabetes([ursulino, masculino, 79.0, nao, nao, passado, 31.19, 5.8, 155], nao). %OK
+diabetes([jose, masculino, 67.0, nao, nao, sim, 27.32, 6.8, 220], sim). %OK
+diabetes([marta, feminino, 74.0, nao, nao, sim, 29.51, 8.2, 240], sim). %OK
+diabetes([jussara, feminino, 37.0, nao, nao, passado, 36.87, 8.8, 160], sim). %OK
+diabetes([katia, feminino, 65.0, sim, sim, nunca, 33.55, 8.9, 202], sim). % OK
+diabetes([marcelo, masculino, 55.0, nao, sim, passado, 30.42, 6.2, 300], sim). %OK
+diabetes([ayla, feminino, 61.0, nao, nao, passado, 34.45, 6.5, 280], sim). %OK
+diabetes([rafaela, feminino, 58.0, sim, nao, nunca, 38.31, 7.0, 200], sim). %OK
+diabetes([cassia, feminino, 61.0, nao, nao, sim, 30.11, 6.2, 240], sim). %OK
+diabetes([elisa, feminino, 26.0, nao, nao, passado, 27.32, 4.0, 200], nao). %OK
+diabetes([alice, feminino, 74.0, nao, nao, passado, 28.12, 5.0, 100], nao). %OK
+diabetes([jade, feminino, 45.0, sim, nao, nunca, 23.05, 4.8, 130], nao). %OK
+diabetes([heloise, masculino, 56.0, nao, nao, nunca, 26.78, 4.8, 200], nao). %OK
+diabetes([benicio, masculino, 20.0, nao, nao, passado, 23.04, 5.7, 160], nao). %OK
+diabetes([paulo, masculino, 70.0, nao, nao, passado, 15.94, 5.8, 158], nao). %OK
+diabetes([otavio, masculino, 30.0, nao, nao, passado, 15.8, 6.2, 90], nao). %OK
+diabetes([isis, feminino, 80.0, nao, nao, nunca, 22.04, 9.0, 209], sim). %OK
+diabetes([francinaldo, masculino, 63.0, nao, sim, passado, 27.32, 6.6, 300], sim). %OK
+diabetes([juvelino, masculino, 58.0, nao, nao, passado, 32.38, 6.6, 159], sim). %OK
+diabetes([maya, feminino, 43.0, sim, nao, nunca, 34.21, 9.0, 160], sim). %OK
+diabetes([genetildes, masculino, 56.0, nao, nao, nunca, 37.59, 4.0, 159], nao). %OK
+diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao). %OK
+diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao). %OK
+diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao). %OK
 
 main :-
     nl, nl,
     write('HOSPITAL SIRIO-PIAUIES'), nl,
-    write('1 - Adicionar paciente'), nl,
+    write('1 - Diagnosticar'), nl,
     write('2 - Listar pacientes'), nl,
     write('3 - Calcular IMC'), nl,
     write('4 - Editar paciente'), nl,
     write('5 - Remover paciente'), nl,
-    write('6 - Diagnosticar'), nl,
-    write('7 - Sair'), nl,
+    write('6 - Sair'), nl,
     write('Escolha uma opcao: '),
     read(Opcao),    
     escolher_opcao(Opcao).
 
-escolher_opcao(1) :-
-    write('Digite o nome: '),
-    read(Nome),
-    write('Digite o sexo: '),
-    read(Sexo),
-    write('Digite a idade: '),
-    read(Idade),
-    write('Hipertensao?: '),
-    read(Hipertensao),
-    write('Problema cardiaco?: '),
-    read(Cardiaco),
-    write('Fumante?: '),
-    read(Fumante),
-    write('Sabe o seu IMC (s/n)?: '),
-    read(SabeImc),
-    (
-        SabeImc = 's' -> write('Digite o IMC: '), read(IMC);
-        SabeImc = 'n' -> calcular_imc(IMC)
-    ),
-    write('Hemoglobina: '),
-    read(Hemoglobina),
-    write('Glicose: '),
-    read(Glicose),
-    write('Diabetes?: '),
-    read(Diabetes),
-    adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
-    main.
 
 escolher_opcao(2) :-
     listar_pacientes,
@@ -93,7 +65,7 @@ escolher_opcao(5) :-
     write('Paciente removido com sucesso!'), nl,
     main.
 
-escolher_opcao(6) :-
+escolher_opcao(1) :-
     write('Digite o nome: '),
     read(Nome),
     write('Digite o sexo: '),
@@ -112,7 +84,7 @@ escolher_opcao(6) :-
         TemCardiaco = 's' -> write('Cardiaco (sim/nao): '), read(Cardiaco);
         TemCardiaco = 'n' -> Cardiaco = '_'
     ),
-    write('Fumante? (sim/passado/nao): '),
+    write('Fumante? (sim/passado/nunca): '),
     read(Fumante),
     write('Sabe o seu IMC (s/n)?: '),
     read(SabeImc),
@@ -120,32 +92,27 @@ escolher_opcao(6) :-
         SabeImc = 's' -> write('Digite o IMC: '), read(IMC);
         SabeImc = 'n' -> calcular_imc(IMC)
     ),
-    write('Sabe se tem hemoglobina (s/n)? '),
+    write('Sabe a hemoglobina (s/n)? '),
     read(SabeHemoglobina),
     (
         SabeHemoglobina = 's' -> write('Hemoglobina: '), read(Hemoglobina);
         SabeHemoglobina = 'n' -> Hemoglobina = '_'
     ),
-    write('Sabe  se tem glicose (s/n)? '),
+    write('Sabe a glicose (s/n)? '),
     read(SabeGlicose),
     (
         SabeGlicose = 's' -> write('Glicose: '), read(Glicose);
         SabeGlicose = 'n' -> Glicose = '_'
     ),
-    write(Hipertensao), nl,
-    write(Cardiaco), nl,
-    write(Fumante), nl,
-    write(IMC), nl,
-    write(Hemoglobina), nl,
-    write(Glicose), nl,
-    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes), nl,
     (
-        Diabetes = 'sim' -> write('Voce possui Diabetes.'),nl;
-        Diabetes = 'nao' -> write('Voce nao possui Diabetes'),nl;
+        Diabetes = 'sim' -> write('Voce possui Diabetes.'), nl;
+        Diabetes = 'nao' -> write('Voce nao possui Diabetes'), nl;
         Diabetes = 'indeterminavel' -> write('nao foi possivel realizar o diagnostico, volte com mais exames!'), nl  
-    ).
+    ),
+    main.
 
-escolher_opcao(7) :-
+escolher_opcao(6) :-
     write('Ate logo!'), nl.
 
 adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
@@ -272,12 +239,82 @@ contar_elementos_lista([Elemento|Resto], Contagem) :-
 contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
     contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
 
+% Se for >= 6 e for < 9.
+% Nome, Sexo, IMC, Glicose, Hemoglobina, OPCAO -> Probalidade
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
 chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     contar_elementos_lista([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], ContagemE),
-    write(ContagemE), nl,
     (   (ContagemE =< 1 ; Glicose = '_'; Hemoglobina = '_'; IMC = '_'),
         Diabetes = indeterminavel
+    ;
+        (ContagemE >= 6, ContagemE < 9), nl,
+        write('AVISOS!:'), nl,
+        write('E recomendado que tenha no minimo todas as caracteristicas preenchidas para um melhor diagnostico!'),nl,
+        write('Como nao foi informado todas as informaçoes que foram pedidas e possivel que exista uma margem de erro no diagnostico!'), nl, 
+        write('Tambem nao sera adicionado na base de dados para nao acontecer conflitos em futuros diagnosticos!'),nl,nl,
+        write('Perguntas Extras!'),nl,
+        fator_sexo(Sexo, FatorSexo),
+        fator_hipertensao(Hipertensao, FatorHipertensao),
+        fator_idade(Idade, FatorIdade),
+        fator_imc(IMC, FatorIMC),
+        fator_hemoglobina(Hemoglobina, FatorHemoglobina),
+        fator_glicose(Glicose, FatorGlicose),
+        fator_cardiaco(Cardiaco, FatorCardiaco),
+        fator_fumante(Fumante, FatorFumante),
+        perguntas_extras(FatorHistoricoF, FatorSedentario), 
+
+        Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo + FatorSedentario,
+
+        (   Probabilidade >= 7,
+            (   FatorGlicose == 0,
+                Probabilidade_H_I is FatorHemoglobina + FatorIMC + FatorHistoricoF,
+                write(Probabilidade_H_I), nl,
+                (   Probabilidade_H_I > 4, Diabetes = sim
+                ;   Probabilidade_H_I < 2, Diabetes = nao
+                ;   Probabilidade_H_I >= 3, Probabilidade_H_I =< 4, Diabetes = indeterminavel
+                )
+            ;   FatorGlicose == 1,
+                Probabilidade_H_I is FatorHemoglobina + FatorIMC + FatorHistoricoF,
+                write(Probabilidade_H_I), nl,
+                (   Probabilidade_H_I > 4, Diabetes = sim
+                ;   Probabilidade_H_I < 2, Diabetes = nao
+                ;   Probabilidade_H_I >= 3, Probabilidade_H_I =< 4, Diabetes = indeterminavel
+                )
+            ;   FatorGlicose == 2,
+                Diabetes = sim
+            )
+        ;   Probabilidade >= 4, Probabilidade < 7,
+            (   FatorGlicose == 0,
+                Diabetes = nao
+            ;   FatorGlicose == 1,
+                Probabilidade_H_I is FatorHemoglobina + FatorIMC + FatorHistoricoF,
+                write(Probabilidade_H_I), nl,
+                (   Probabilidade_H_I > 4, Diabetes = sim
+                ;   Probabilidade_H_I < 2, Diabetes = nao
+                ;   Probabilidade_H_I >= 3, Probabilidade_H_I =< 4, Diabetes = indeterminavel
+                )
+            ;   FatorGlicose == 2,
+                Diabetes = sim
+            )
+        ;   Probabilidade < 4,
+            (   FatorGlicose == 0,
+                Diabetes = nao
+            ;   FatorGlicose == 1,
+                Probabilidade_H_I is FatorHemoglobina + FatorIMC + FatorHistoricoF,
+                write(Probabilidade_H_I), nl,
+                (   Probabilidade_H_I > 4, Diabetes = sim
+                ;   Probabilidade_H_I < 2, Diabetes = nao
+                ;   Probabilidade_H_I >= 3, Probabilidade_H_I =< 4, Diabetes = indeterminavel
+                )
+            ;   FatorGlicose == 2,
+                Probabilidade_H_I is FatorHemoglobina + FatorIMC + FatorHistoricoF,
+                write(Probabilidade_H_I), nl,
+                (   Probabilidade_H_I > 4, Diabetes = sim
+                ;   Probabilidade_H_I < 2, Diabetes = nao
+                ;   Probabilidade_H_I >= 3, Probabilidade_H_I =< 4, Diabetes = indeterminavel
+                )
+            )
+        )
     ;   % Fatores que contribuem para a probabilidade
         fator_sexo(Sexo, FatorSexo),
         fator_hipertensao(Hipertensao, FatorHipertensao),
@@ -291,17 +328,16 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
         % Cálculo da probabilidade
         Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
 
+        
         % Avaliação das condições de probabilidade
         (   Probabilidade >= 7,
             (   FatorGlicose == 0,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                write(Probabilidade_H_I), nl,
                 (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I < 2, Diabetes = nao
                 )
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                write(Probabilidade_H_I), nl,
                 (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I < 2, Diabetes = nao
                 )
@@ -313,7 +349,6 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                write(Probabilidade_H_I), nl,
                 (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I < 2, Diabetes = nao
                 )
@@ -325,18 +360,16 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                write(Probabilidade_H_I), nl,
                 (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I < 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                write(Probabilidade_H_I), nl,
                 (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I < 2, Diabetes = nao
                 )
             )
-        )
+        ), adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)
     ).
 
 
@@ -371,10 +404,11 @@ fator_glicose(Glicose, Fator) :-
     (
         (Glicose >= MenorGlicose, Glicose =< MaiorGlicoseS, Fator is 1);
         (Glicose =< MaiorGlicoseS, Glicose >= MenorGlicoseS, Fator is 0);
-        (Glicose >= MenorGlicose, Glicose =< MaiorGlicose, Fator is 2)
+        (Glicose >= MenorGlicose, Glicose =< MaiorGlicose, Fator is 2);
+        (Glicose = '_', Fator is 0)
     ).
 
-perguntas_extras(Pextras) :-
+perguntas_extras(FatorHF, FatorS) :-
         write('Voce e sedentario?'), nl,
         write('sim ou nao: '), read(Sedentario),
         write('Voce tem um parente de primeiro grau - Pai, Mae, Irmao ou Irma - com diabetes? '), nl,
@@ -386,8 +420,7 @@ perguntas_extras(Pextras) :-
         (
             (HistoricoF = 'sim', FatorHF is 2);
             (HistoricoF = 'nao', FatorHF is 0)    
-        ),
-        Pextras is FatorS + FatorHF.
+        ).
 
 % Regra para contar o número de pessoas masculinas com diabetes
 contar_diabeticos_masculinos(Contagem) :-
@@ -405,20 +438,23 @@ fator_sexo(Sexo, Fator) :-
         (ContMasc > ContFemi, Sexo = masculino, Fator is 1);
         (ContMasc > ContFemi, Sexo = feminino, Fator is 0);
         (ContFemi > ContMasc, Sexo = masculino, Fator is 0);
-        (ContFemi > ContMasc, Sexo = feminino, Fator is 1)
+        (ContFemi > ContMasc, Sexo = feminino, Fator is 1);
+        (Sexo = '_', Fator is 0)
     ).
 
 fator_hipertensao(Hipertensao, Fator) :-
     (
         (Hipertensao = 'sim', Fator is 2);
-        (Hipertensao = 'nao', Fator is 0)
+        (Hipertensao = 'nao', Fator is 0);
+        (Hipertensao = '_', Fator is 0)
     ).
     
 % Fatores individuais
 fator_idade(Idade, Fator) :- 
     (
         (Idade >= 45, Fator is 2, !);
-        (Idade < 45, Fator is 0)    
+        (Idade < 45, Fator is 0);
+        (Idade = '_', Fator is 0)
     ).
 
 media_imc_diabetes(Media) :-
@@ -437,12 +473,11 @@ media_imc_sem_diabetes(Media) :-
 fator_imc(IMC, Fator) :- 
     media_imc_diabetes(MediaIMC),
     media_imc_sem_diabetes(MediaIMCS),
-    write(MediaIMC), nl,
-    write(MediaIMCS), nl,
     (
         (IMC >= MediaIMC, Fator = 3, !);
         (IMC =< MediaIMC, IMC >= MediaIMCS, Fator = 1, !);
-        (IMC =< MediaIMCS, Fator = 0)
+        (IMC =< MediaIMCS, Fator = 0);
+        (IMC = '_', Fator is 0)
     ).
 
 menor_hemoglobina_diabetes(MenorHemoglobina) :-
@@ -473,23 +508,25 @@ fator_hemoglobina(Hemoglobina, Fator) :-
     (
         (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobinaS, Fator = 1, !);
         (Hemoglobina =< MaiorHemoglobinaS, Hemoglobina >= MenorHemoglobinaS, Fator = 0, !);
-        (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobina, Fator = 2)
-    ),
-    write(Fator), nl.
+        (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobina, Fator = 2);
+        (Hemoglobina = '_', Fator is 0)
+    ).
         
 
 
 fator_cardiaco(Cardiaco, Fator) :- 
     (
         (Cardiaco = 'sim', Fator is 1);
-        (Cardiaco = 'nao', Fator is 0)    
+        (Cardiaco = 'nao', Fator is 0);
+        (Cardiaco = '_', Fator is 0) 
     ).
 
 fator_fumante(Fumante, Fator) :- 
     (
         (Fumante = 'sim', Fator is 2);
         (Fumante = 'passado', Fator is 1);
-        (Fumante = 'nunca', Fator is 0)    
+        (Fumante = 'nunca', Fator is 0);    
+        (Fumante = '_', Fator is 0)
     ).
 
     
