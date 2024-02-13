@@ -68,11 +68,15 @@ escolher_opcao(5) :-
 escolher_opcao(1) :-
     write('Digite o nome: '),
     read(Nome),
+    (
+        diabetes([Nome, _, _, _, _, _, _, _, _], _), nl, write('Paciente ja existe, digite o nome junto com seus sobrenomes!'), nl, write('Se existir uma pessoa exatamente com o mesmo nome e sobrenome, digite o CPF junto ao primeiro nome'), nl, nl, escolher_opcao(1);
+        true
+    ),
     write('Digite o sexo: '),
     read(Sexo),
     write('Digite a idade: '),
     read(Idade),
-    write('Sabe se tem hipertensao (s/n)? '), %Voce sabe se possui hipertensao?
+    write('Sabe se tem hipertensao (s/n)? '),
     read(TemHipertensao),
     (
         TemHipertensao = 's' -> write('Hipertensao (sim/nao):'), read(Hipertensao);
@@ -108,7 +112,7 @@ escolher_opcao(1) :-
     (
         Diabetes = 'sim' -> write('Voce possui Diabetes.'), nl;
         Diabetes = 'nao' -> write('Voce nao possui Diabetes'), nl;
-        Diabetes = 'indeterminavel' -> write('nao foi possivel realizar o diagnostico, volte com mais exames!'), nl  
+        Diabetes = 'indeterminavel' -> write('Nao foi possivel realizar o diagnostico, volte com mais exames!'), nl  
     ),
     main.
 
@@ -250,7 +254,7 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
         (ContagemE >= 6, ContagemE < 9), nl,
         write('AVISOS!:'), nl,
         write('E recomendado que tenha no minimo todas as caracteristicas preenchidas para um melhor diagnostico!'),nl,
-        write('Como nao foi informado todas as informaçoes que foram pedidas e possivel que exista uma margem de erro no diagnostico!'), nl, 
+        write('Como nao foi informado todas as informacoes que foram pedidas e possivel que exista uma margem de erro no diagnostico!'), nl, 
         write('Tambem nao sera adicionado na base de dados para nao acontecer conflitos em futuros diagnosticos!'),nl,nl,
         write('Perguntas Extras!'),nl,
         fator_sexo(Sexo, FatorSexo),
@@ -405,14 +409,17 @@ fator_glicose(Glicose, Fator) :-
         (Glicose >= MenorGlicose, Glicose =< MaiorGlicoseS, Fator is 1);
         (Glicose =< MaiorGlicoseS, Glicose >= MenorGlicoseS, Fator is 0);
         (Glicose >= MenorGlicose, Glicose =< MaiorGlicose, Fator is 2);
+        (Glicose < MenorGlicoseS, Fator is 0);
+        (Glicose > MaiorGlicose, Fator is 2);
+        (Glicose > MaiorGlicoseS, Glicose < MenorGlicose, Fator is 1);
         (Glicose = '_', Fator is 0)
     ).
 
 perguntas_extras(FatorHF, FatorS) :-
         write('Voce e sedentario?'), nl,
-        write('sim ou nao: '), read(Sedentario),
-        write('Voce tem um parente de primeiro grau - Pai, Mae, Irmao ou Irma - com diabetes? '), nl,
-        write('sim ou nao: '), read(HistoricoF), 
+        write('(sim ou nao): '), read(Sedentario),
+        write('Voce tem um parente de primeiro grau - pai, mae, irmao ou irma - com diabetes? '), nl,
+        write('(sim ou nao): '), read(HistoricoF), 
         (
             (Sedentario = 'sim', FatorS is 1);
             (Sedentario = 'nao', FatorS is 0)
@@ -509,10 +516,11 @@ fator_hemoglobina(Hemoglobina, Fator) :-
         (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobinaS, Fator = 1, !);
         (Hemoglobina =< MaiorHemoglobinaS, Hemoglobina >= MenorHemoglobinaS, Fator = 0, !);
         (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobina, Fator = 2);
+        (Hemoglobina < MenorHemoglobinaS, Fator = 0);
+        (Hemoglobina > MaiorHemoglobina, Fator = 2);
+        (Hemoglobina > MaiorHemoglobinaS, Hemoglobina < MenorHemoglobina, Fator = 1);
         (Hemoglobina = '_', Fator is 0)
     ).
-        
-
 
 fator_cardiaco(Cardiaco, Fator) :- 
     (
@@ -528,5 +536,3 @@ fator_fumante(Fumante, Fator) :-
         (Fumante = 'nunca', Fator is 0);    
         (Fumante = '_', Fator is 0)
     ).
-
-    
