@@ -234,20 +234,23 @@ editar_diabetes(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
 % Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
+% Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
 contar_elementos_lista([], 0). % Caso base: a lista está vazia, então o número de elementos é 0
 contar_elementos_lista([Elemento|Resto], Contagem) :-
     Elemento \= '_', % Verifica se o elemento atual não é igual a '_'
     contar_elementos_lista(Resto, ContagemRestante),
     Contagem is ContagemRestante + 1.
 
-contar_elementos_lista([_|Resto], Contagem) :- % Caso em que o elemento é '_', então não contamos
+contar_elementos_lista(['_'|Resto], Contagem) :-
     contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
+
 
 % Se for >= 6 e for < 9.
 % Nome, Sexo, IMC, Glicose, Hemoglobina, OPCAO -> Probalidade
 % Regra para calcular a probabilidade de diabetes em escala de 0 a 1
 chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     contar_elementos_lista([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], ContagemE),
+    % write(ContagemE), nl,
     (   (ContagemE =< 1 ; Glicose = '_'; Hemoglobina = '_'; IMC = '_'),
         Diabetes = indeterminavel
     ;
@@ -319,7 +322,7 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 )
             )
         )
-    ;   % Fatores que contribuem para a probabilidade
+    ;    % Fatores que contribuem para a probabilidade
         fator_sexo(Sexo, FatorSexo),
         fator_hipertensao(Hipertensao, FatorHipertensao),
         fator_idade(Idade, FatorIdade),
@@ -337,13 +340,13 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
         (   Probabilidade >= 7,
             (   FatorGlicose == 0,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I > 3, Diabetes = sim
-                ;   Probabilidade_H_I < 2, Diabetes = nao
+                (   Probabilidade_H_I >= 3, Diabetes = sim
+                ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I > 3, Diabetes = sim
-                ;   Probabilidade_H_I < 2, Diabetes = nao
+                (   Probabilidade_H_I >= 3, Diabetes = sim
+                ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
                 Diabetes = sim
@@ -353,8 +356,8 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I > 3, Diabetes = sim
-                ;   Probabilidade_H_I < 2, Diabetes = nao
+                (   Probabilidade_H_I >= 3, Diabetes = sim
+                ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
                 Diabetes = sim
@@ -364,16 +367,17 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I > 3, Diabetes = sim
-                ;   Probabilidade_H_I < 2, Diabetes = nao
+                (   Probabilidade_H_I >= 3, Diabetes = sim
+                ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I > 3, Diabetes = sim
-                ;   Probabilidade_H_I < 2, Diabetes = nao
+                (   Probabilidade_H_I >= 3, Diabetes = sim
+                ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
-            )
-        ), adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)
+            ),
+        adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)
+        )
     ).
 
 
@@ -520,7 +524,8 @@ fator_hemoglobina(Hemoglobina, Fator) :-
         (Hemoglobina > MaiorHemoglobina, Fator = 2);
         (Hemoglobina > MaiorHemoglobinaS, Hemoglobina < MenorHemoglobina, Fator = 1);
         (Hemoglobina = '_', Fator is 0)
-    ).
+    ),
+    write(Fator), nl.
 
 fator_cardiaco(Cardiaco, Fator) :- 
     (
