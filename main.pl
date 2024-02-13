@@ -154,7 +154,7 @@ editar_paciente :-
     write('Digite o nome do paciente que deseja editar: '),
     read(Nome),
     write('Digite qual campo deseja editar '), nl,
-    write('(nome, sexo, idade, hipertensao, cardiaco, fumante, imc, hemoglobina, glicose, diabetes): '),
+    write('(nome, sexo, idade, hipertensao, cardiaco, fumante, imc, hemoglobina, glicose): '),
     read(Campo),
     (
         Campo = 'nome' -> write('Digite o novo nome: '), read(NovoNome), editar_nome(Nome, NovoNome);
@@ -165,8 +165,7 @@ editar_paciente :-
         Campo = 'fumante' -> write('Digite a nova situacao de fumante: '), read(NovoFumante), editar_fumante(Nome, NovoFumante);
         Campo = 'imc' -> write('Digite o novo IMC: '), read(NovoImc), editar_imc(Nome, NovoImc);
         Campo = 'hemoglobina' -> write('Digite a nova hemoglobina: '), read(NovaHemoglobina), editar_hemoglobina(Nome, NovaHemoglobina);
-        Campo = 'glicose' -> write('Digite a nova glicose: '), read(NovaGlicose), editar_glicose(Nome, NovaGlicose);
-        Campo = 'diabetes' -> write('Digite a nova situacao de diabetes: '), read(NovoDiabetes), editar_diabetes(Nome, NovoDiabetes)
+        Campo = 'glicose' -> write('Digite a nova glicose: '), read(NovaGlicose), editar_glicose(Nome, NovaGlicose)
     ).
 
 % Conjunto de situações e edição, incluindo o novo cálculo da diabetes se necessário
