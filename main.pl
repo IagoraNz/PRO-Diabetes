@@ -374,12 +374,12 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
         (   Probabilidade >= 7,
             (   FatorGlicose == 0,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I >= 3, Diabetes = sim
+                (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I >= 3, Diabetes = sim
+                (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
@@ -390,7 +390,7 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I >= 3, Diabetes = sim
+                (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
@@ -401,12 +401,12 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 Diabetes = nao
             ;   FatorGlicose == 1,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I >= 3, Diabetes = sim
+                (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             ;   FatorGlicose == 2,
                 Probabilidade_H_I is FatorHemoglobina + FatorIMC,
-                (   Probabilidade_H_I >= 3, Diabetes = sim
+                (   Probabilidade_H_I > 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
             )
@@ -559,8 +559,7 @@ fator_hemoglobina(Hemoglobina, Fator) :-
         (Hemoglobina > MaiorHemoglobina, Fator = 2);
         (Hemoglobina > MaiorHemoglobinaS, Hemoglobina < MenorHemoglobina, Fator = 1);
         (Hemoglobina = '_', Fator is 0)
-    ),
-    write(Fator), nl.
+    ).
 
 % Fatores que contribuem para a probabilidade de diabetes
 fator_cardiaco(Cardiaco, Fator) :- 
