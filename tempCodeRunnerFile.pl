@@ -1,3 +1,1 @@
-
-    (
-        TemCardiaco = 's' -> write('Ca
+ 

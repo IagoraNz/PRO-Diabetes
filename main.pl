@@ -1,6 +1,8 @@
+% Pacientes adicionados serão dinâmicos
 :- dynamic diabetes/2.
+% Prompt para remover o |: que costuma aparecer nos writes
 :- prompt(_, '').
-
+% Banco de dados
 diabetes([maria, feminino, 37.0, nao, nao, passado, 30.5, 5.7, 100], nao). %OK
 diabetes([gorete, feminino, 53.0, nao, nao, passado, 26.37, 4.5, 112], nao). %OK
 diabetes([pedro, masculino, 54.0, nao, nao, nunca, 31.86, 6.6, 145],nao). %OK
@@ -23,18 +25,18 @@ diabetes([benicio, masculino, 20.0, nao, nao, passado, 23.04, 5.7, 160], nao). %
 diabetes([paulo, masculino, 70.0, nao, nao, passado, 15.94, 5.8, 158], nao). %OK
 diabetes([otavio, masculino, 30.0, nao, nao, passado, 15.8, 6.2, 90], nao). %OK
 diabetes([isis, feminino, 80.0, nao, nao, nunca, 22.04, 9.0, 209], sim). %OK
-diabetes([francinaldo, masculino, 63.0, nao, sim, passado, 27.32, 6.6, 300], sim). %OK
+diabetes([francivaldo, masculino, 63.0, nao, sim, passado, 27.32, 6.6, 300], sim). %OK
 diabetes([juvelino, masculino, 58.0, nao, nao, passado, 32.38, 6.6, 159], sim). %OK
 diabetes([maya, feminino, 43.0, sim, nao, nunca, 34.21, 9.0, 160], sim). %OK
 diabetes([genetildes, masculino, 56.0, nao, nao, nunca, 37.59, 4.0, 159], nao). %OK
 diabetes([waldisney, masculino, 60.0, nao, nao, passado, 25.4, 4.0, 200], nao). %OK
 diabetes([reinaldo, masculino, 27.0, nao, nao, passado, 27.32, 3.5, 100], nao). %OK
 diabetes([frederico, masculino, 54.0, nao, nao, passado, 30.41, 5.0, 158], nao). %OK
-
+% Função principal e executável
 main :-
     nl, nl,
     write('HOSPITAL SIRIO-PIAUIES'), nl,
-    write('1 - Diagnosticar'), nl,
+    write('1 - Adicionar e diagnosticar'), nl,
     write('2 - Listar pacientes'), nl,
     write('3 - Calcular IMC'), nl,
     write('4 - Editar paciente'), nl,
@@ -44,7 +46,7 @@ main :-
     read(Opcao),    
     escolher_opcao(Opcao).
 
-
+% Conjunto de situações conforme a opção escolhida
 escolher_opcao(2) :-
     listar_pacientes,
     main.
@@ -74,12 +76,12 @@ escolher_opcao(1) :-
     ),
     write('Digite o sexo: '),
     read(Sexo),
-    write('Digite a idade: '),
+    write('Digite a idade (XX.X): '),
     read(Idade),
-    write('Sabe se tem hipertensao (s/n)? '),
+    write('Sabe se tem hipertensao (s/n)?: '),
     read(TemHipertensao),
     (
-        TemHipertensao = 's' -> write('Hipertensao (sim/nao):'), read(Hipertensao);
+        TemHipertensao = 's' -> write('Hipertensao (sim/nao): '), read(Hipertensao);
         TemHipertensao = 'n' -> Hipertensao = '_'
     ),
     write('Sabe se tem problema cardiaco? (s/n): '),
@@ -99,7 +101,7 @@ escolher_opcao(1) :-
     write('Sabe a hemoglobina (s/n)? '),
     read(SabeHemoglobina),
     (
-        SabeHemoglobina = 's' -> write('Hemoglobina: '), read(Hemoglobina);
+        SabeHemoglobina = 's' -> write('Hemoglobina (X.X): '), read(Hemoglobina);
         SabeHemoglobina = 'n' -> Hemoglobina = '_'
     ),
     write('Sabe a glicose (s/n)? '),
@@ -119,31 +121,35 @@ escolher_opcao(1) :-
 escolher_opcao(6) :-
     write('Ate logo!'), nl.
 
+% Função que adiciona o paciente ao banco de dados dinâmicos
 adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     \+ diabetes(Nome, _),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
-    write('Paciente adicionado com sucesso!'), nl.
+    write('Paciente diagnosticado!'), nl.
 
 adicionar_paciente([Nome, _, _, _, _, _, _, _, _], _) :-
     diabetes(Nome, _),
     write('Paciente ja existe!'), nl.
 
+% Função para calcular IMC caso o usuário não saiba
 calcular_imc(Imc) :-
     write('Digite o peso: '),
     read(Peso),
-    write('Digite a altura: '),
+    write('Digite a altura (em metros): '),
     read(Altura),
     TempImc is Peso / (Altura * Altura),
-    Imc is round(TempImc * 10) / 10.
+    Imc is round(TempImc * 100) / 100.
 
+% Lista todos os pacientes do banco de dados junto com os novos pacientes dinâmicos
 listar_pacientes :-
     diabetes(Paciente, Diabetes),
-    write(Paciente), %aqui ele da um print no teu nome so e em diabetes ele mostra a lista com tudo
+    write(Paciente),
     write(' - Diabetes: '), write(Diabetes),
     nl,
     fail.
 listar_pacientes.
 
+% Função para editar um paciente de acordo com a característica que o usuário deseja
 editar_paciente :-
     write('Digite o nome do paciente que deseja editar: '),
     read(Nome),
@@ -163,16 +169,22 @@ editar_paciente :-
         Campo = 'diabetes' -> write('Digite a nova situacao de diabetes: '), read(NovoDiabetes), editar_diabetes(Nome, NovoDiabetes)
     ).
 
+% Conjunto de situações e edição, incluindo o novo cálculo da diabetes se necessário
 editar_nome(Nome, NovoNome) :-
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([NovoNome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     write('Nome editado com sucesso!'), nl.
+% Bem como caso o paciente não exista, verificando-se em todos os casos
 editar_nome(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
 editar_sexo(Nome, NovoSexo) :-
     retract(diabetes([Nome, _, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, NovoSexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, NovoSexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, NovoSexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, NovoSexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, NovoSexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
     write('Sexo editado com sucesso!'), nl.
 editar_sexo(_, _) :-
     write('Paciente nao encontrado!'), nl.
@@ -180,6 +192,10 @@ editar_sexo(_, _) :-
 editar_idade(Nome, NovaIdade) :-
     retract(diabetes([Nome, Sexo, _, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, NovaIdade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, NovaIdade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, NovaIdade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, NovaIdade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, NovaIdade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
     write('Idade editada com sucesso!'), nl.
 editar_idade(_, _) :-
     write('Paciente nao encontrado!'), nl.
@@ -187,6 +203,10 @@ editar_idade(_, _) :-
 editar_hipertensao(Nome, NovaHipertensao) :-
     retract(diabetes([Nome, Sexo, Idade, _, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, NovaHipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, NovaHipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, NovaHipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, NovaHipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, NovaHipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
     write('Hipertensao editada com sucesso!'), nl.
 editar_hipertensao(_, _) :-
     write('Paciente nao encontrado!'), nl.
@@ -194,6 +214,10 @@ editar_hipertensao(_, _) :-
 editar_cardiaco(Nome, NovaCardiaco) :-
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, _, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, NovaCardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, NovaCardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, NovaCardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, NovaCardiaco, Fumante, IMC, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, NovaCardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
     write('Problema cardiaco editado com sucesso!'), nl.
 editar_cardiaco(_, _) :-
     write('Paciente nao encontrado!'), nl.
@@ -201,6 +225,10 @@ editar_cardiaco(_, _) :-
 editar_fumante(Nome, NovoFumante) :-
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, _, IMC, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, NovoFumante, IMC, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, NovoFumante, IMC, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, NovoFumante, IMC, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, NovoFumante, IMC, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, NovoFumante, IMC, Hemoglobina, Glicose], _)),
     write('Fumante editado com sucesso!'), nl.
 editar_fumante(_, _) :-
     write('Paciente nao encontrado!'), nl.
@@ -214,47 +242,54 @@ editar_imc(Nome, NovoImc) :-
     ),
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, _, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], _)),
     write('IMC editado com sucesso!'), nl.
+editar_imc(_, _) :-
+    write('Paciente nao encontrado!'), nl.
 
 editar_hemoglobina(Nome, NovaHemoglobina) :-
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, _, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, NovaHemoglobina, Glicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, NovaHemoglobina, Glicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, NovaHemoglobina, Glicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, NovaHemoglobina, Glicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, NovaHemoglobina, Glicose], _)),
     write('Hemoglobina editada com sucesso!'), nl.
+editar_hemoglobina(_, _) :-
+    write('Paciente nao encontrado!'), nl.
 
 editar_glicose(Nome, NovaGlicose) :-
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, _], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, NovaGlicose], Diabetes)),
+    chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, NovaGlicose], NovaDiabetes),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, NovaGlicose], _)),
+    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, NovaGlicose], NovaDiabetes)),
+    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, NovaGlicose], _)),
     write('Glicose editada com sucesso!'), nl.
-
-editar_diabetes(Nome, NovoDiabetes) :-
-    retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], _)),
-    assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], NovoDiabetes)),
-    write('Diabetes editada com sucesso!'), nl.
-editar_diabetes(_, _) :-
+editar_glicose(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
 % Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
-% Regra para contar o número de elementos em uma lista, excluindo os elementos '_'
 contar_elementos_lista([], 0). % Caso base: a lista está vazia, então o número de elementos é 0
 contar_elementos_lista([Elemento|Resto], Contagem) :-
-    Elemento \= '_', % Verifica se o elemento atual não é igual a '_'
+    Elemento \= '_', %Verifica se o elemento atual não é igual a '_'
     contar_elementos_lista(Resto, ContagemRestante),
     Contagem is ContagemRestante + 1.
 
 contar_elementos_lista(['_'|Resto], Contagem) :-
-    contar_elementos_lista(Resto, Contagem). % Continuamos a contagem sem adicionar 1
+    contar_elementos_lista(Resto, Contagem). %Continuamos a contagem sem adicionar 1
 
 
-% Se for >= 6 e for < 9.
-% Nome, Sexo, IMC, Glicose, Hemoglobina, OPCAO -> Probalidade
-% Regra para calcular a probabilidade de diabetes em escala de 0 a 1
+% Regra para calcular a probabilidade de uma pessoa ter diabetes
 chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes) :-
     contar_elementos_lista([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], ContagemE),
-    % write(ContagemE), nl,
     (   (ContagemE =< 1 ; Glicose = '_'; Hemoglobina = '_'; IMC = '_'),
         Diabetes = indeterminavel
     ;
-        (ContagemE >= 6, ContagemE < 9), nl,
+        (ContagemE >= 6, ContagemE < 9), nl, % Caso em que o paciente não informou todas as informações
         write('AVISOS!:'), nl,
         write('E recomendado que tenha no minimo todas as caracteristicas preenchidas para um melhor diagnostico!'),nl,
         write('Como nao foi informado todas as informacoes que foram pedidas e possivel que exista uma margem de erro no diagnostico!'), nl, 
@@ -335,7 +370,6 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
         % Cálculo da probabilidade
         Probabilidade is FatorIdade + FatorIMC + FatorHemoglobina + FatorCardiaco + FatorFumante + FatorHipertensao + FatorSexo,
 
-        
         % Avaliação das condições de probabilidade
         (   Probabilidade >= 7,
             (   FatorGlicose == 0,
@@ -375,12 +409,10 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 (   Probabilidade_H_I >= 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
-            ),
+            )
+        ),
         adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)
-        )
     ).
-
-
 
 % Regra para encontrar o menor valor de glicose quando o paciente tem diabetes
 menor_glicose_diabetes(MenorGlicose) :-
@@ -403,7 +435,7 @@ maior_glicose(MaiorGlicoseS) :-
     findall(Glicose, diabetes([_, _, _, _, _, _, _, _, Glicose], nao), ListaGlicoses),
     max_list(ListaGlicoses, MaiorGlicoseS).
 
-
+%Reúne os fatores que contribuem para a probabilidade de diabetes
 fator_glicose(Glicose, Fator) :-
     maior_glicose_diabetes(MaiorGlicose), 
     menor_glicose_diabetes(MenorGlicose), 
@@ -419,6 +451,7 @@ fator_glicose(Glicose, Fator) :-
         (Glicose = '_', Fator is 0)
     ).
 
+%Caso o diagnóstico seja impreciso, o paciente é questionado sobre mais informações
 perguntas_extras(FatorHF, FatorS) :-
         write('Voce e sedentario?'), nl,
         write('(sim ou nao): '), read(Sedentario),
@@ -438,10 +471,12 @@ contar_diabeticos_masculinos(Contagem) :-
     findall(_, (diabetes([_, masculino, _, _, _, _, _, _, _], sim)), Lista),
     length(Lista, Contagem).
 
+% Regra para contar o número de pessoas femininas com diabetes
 contar_diabeticos_femininos(Contagem) :-
     findall(_, (diabetes([_, feminino, _, _, _, _, _, _, _], sim)), Lista),
     length(Lista, Contagem).
 
+% Fatores que contribuem para a probabilidade de diabetes
 fator_sexo(Sexo, Fator) :-
     contar_diabeticos_masculinos(ContMasc),
     contar_diabeticos_femininos(ContFemi),
@@ -453,6 +488,7 @@ fator_sexo(Sexo, Fator) :-
         (Sexo = '_', Fator is 0)
     ).
 
+% Fatores que contribuem para a probabilidade de diabetes
 fator_hipertensao(Hipertensao, Fator) :-
     (
         (Hipertensao = 'sim', Fator is 2);
@@ -468,6 +504,7 @@ fator_idade(Idade, Fator) :-
         (Idade = '_', Fator is 0)
     ).
 
+% Predicado para calcular a média do IMC para pacientes com diabetes
 media_imc_diabetes(Media) :-
     findall(IMC, (diabetes([_, _, _, _, _, _, IMC, _, _], sim)), ListaIMCs),
     length(ListaIMCs, N),
@@ -480,7 +517,8 @@ media_imc_sem_diabetes(Media) :-
     length(ListaIMCs, N),
     sumlist(ListaIMCs, Soma),
     Media is Soma / N.
-    
+
+% Fatores que contribuem para a probabilidade de diabetes
 fator_imc(IMC, Fator) :- 
     media_imc_diabetes(MediaIMC),
     media_imc_sem_diabetes(MediaIMCS),
@@ -491,6 +529,7 @@ fator_imc(IMC, Fator) :-
         (IMC = '_', Fator is 0)
     ).
 
+% Conjunto de regras para analisar os parâmetros de hemoglobina
 menor_hemoglobina_diabetes(MenorHemoglobina) :-
     findall(Hemoglobina, diabetes([_, _, _, _, _, _, _, Hemoglobina, _], sim), ListaHemoglobinas),
     min_list(ListaHemoglobinas, MenorHemoglobina).
@@ -512,10 +551,6 @@ fator_hemoglobina(Hemoglobina, Fator) :-
     maior_hemoglobina_diabetes(MaiorHemoglobina),
     maior_hemoglobina(MaiorHemoglobinaS),
     menor_hemoglobina(MenorHemoglobinaS),
-        % write(MaiorHemoglobina), nl,
-        % write(MenorHemoglobina), nl,
-        % write(MaiorHemoglobinaS), nl,
-        % write(MenorHemoglobinaS), nl,
     (
         (Hemoglobina >= MenorHemoglobina, Hemoglobina =< MaiorHemoglobinaS, Fator = 1, !);
         (Hemoglobina =< MaiorHemoglobinaS, Hemoglobina >= MenorHemoglobinaS, Fator = 0, !);
@@ -527,6 +562,7 @@ fator_hemoglobina(Hemoglobina, Fator) :-
     ),
     write(Fator), nl.
 
+% Fatores que contribuem para a probabilidade de diabetes
 fator_cardiaco(Cardiaco, Fator) :- 
     (
         (Cardiaco = 'sim', Fator is 1);
@@ -534,6 +570,7 @@ fator_cardiaco(Cardiaco, Fator) :-
         (Cardiaco = '_', Fator is 0) 
     ).
 
+% Fatores que contribuem para a probabilidade de diabetes
 fator_fumante(Fumante, Fator) :- 
     (
         (Fumante = 'sim', Fator is 2);
