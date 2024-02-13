@@ -43,8 +43,12 @@ main :-
     write('5 - Remover paciente'), nl,
     write('6 - Sair'), nl,
     write('Escolha uma opcao: '),
-    read(Opcao),    
-    escolher_opcao(Opcao).
+    read(Opcao),
+    %Garante que a variável opção seja um número
+    (
+        integer(Opcao) -> escolher_opcao(Opcao);
+        write('Opcao invalida!'), nl, main
+    ).
 
 % Conjunto de situações conforme a opção escolhida
 escolher_opcao(2) :-
@@ -163,7 +167,7 @@ editar_paciente :-
         Campo = 'hipertensao' -> write('Digite a nova situacao de hipertensao: '), read(NovaHipertensao), editar_hipertensao(Nome, NovaHipertensao);
         Campo = 'cardiaco' -> write('Digite a nova situacao cardiaca: '), read(NovaCardiaco), editar_cardiaco(Nome, NovaCardiaco);
         Campo = 'fumante' -> write('Digite a nova situacao de fumante: '), read(NovoFumante), editar_fumante(Nome, NovoFumante);
-        Campo = 'imc' -> write('Digite o novo IMC: '), read(NovoImc), editar_imc(Nome, NovoImc);
+        Campo = 'imc' -> write('Deseja calcular o IMC? (s/n): '), read(Calcular), (Calcular = 's' -> calcular_imc(NovoImc); Calcular = 'n' -> write('Digite o novo IMC: '), read(NovoImc)), editar_imc(Nome, NovoImc);
         Campo = 'hemoglobina' -> write('Digite a nova hemoglobina: '), read(NovaHemoglobina), editar_hemoglobina(Nome, NovaHemoglobina);
         Campo = 'glicose' -> write('Digite a nova glicose: '), read(NovaGlicose), editar_glicose(Nome, NovaGlicose)
     ).
@@ -233,12 +237,6 @@ editar_fumante(_, _) :-
     write('Paciente nao encontrado!'), nl.
 
 editar_imc(Nome, NovoImc) :-
-    write('Deseja calcular o IMC? (s/n): '),
-    read(Calcular),
-    (
-        Calcular = 's' -> calcular_imc(NovoImc);
-        Calcular = 'n' -> true
-    ),
     retract(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, _, Hemoglobina, Glicose], Diabetes)),
     assertz(diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], Diabetes)),
     chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, NovoImc, Hemoglobina, Glicose], NovaDiabetes),
