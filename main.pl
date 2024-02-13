@@ -375,9 +375,9 @@ chances_diabetes([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemogl
                 (   Probabilidade_H_I >= 3, Diabetes = sim
                 ;   Probabilidade_H_I =< 2, Diabetes = nao
                 )
-            ),
+            )
+        ),
         adicionar_paciente([Nome, Sexo, Idade, Hipertensao, Cardiaco, Fumante, IMC, Hemoglobina, Glicose], Diabetes)
-        )
     ).
 
 
